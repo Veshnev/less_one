@@ -7,23 +7,20 @@ namespace controllers;
 class MainController
 {
     /** @var string */
-    private $rootDir;
-
-    /** @var string */
     public $title;
 
     /**
      * MainController constructor.
-     * @param string $rootDir
      */
-    public function __construct(string $rootDir)
+    public function __construct()
     {
-        $this->rootDir = $rootDir;
         $this->title = 'Main page';
     }
 
-    public function render()
+    public function getData()
     {
-        include $this->rootDir . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'MainTemplate.phtml';
+        return [
+            'title' => $this->title,
+        ];
     }
 }

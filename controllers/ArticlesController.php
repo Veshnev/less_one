@@ -7,23 +7,20 @@ namespace controllers;
 class ArticlesController
 {
     /** @var string */
-    private $rootDir;
-
-    /** @var string */
     public $title;
 
     /**
-     * MainController constructor.
-     * @param string $rootDir
+     * ArticlesController constructor.
      */
-    public function __construct(string $rootDir)
+    public function __construct()
     {
-        $this->rootDir = $rootDir;
-        $this->title = 'Articles list page';
+        $this->title = 'Articles list';
     }
 
-    public function render()
+    public function getData()
     {
-        include $this->rootDir . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'MainTemplate.phtml';
+        return [
+            'title' => $this->title,
+        ];
     }
 }

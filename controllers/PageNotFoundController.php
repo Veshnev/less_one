@@ -7,23 +7,21 @@ namespace controllers;
 class PageNotFoundController
 {
     /** @var string */
-    private $rootDir;
-
-    /** @var string */
     public $title;
 
     /**
-     * MainController constructor.
-     * @param string $rootDir
+     * PageNotFoundController constructor.
      */
-    public function __construct(string $rootDir)
+    public function __construct()
     {
-        $this->rootDir = $rootDir;
+	    http_response_code(404);
         $this->title = 'Page not found';
     }
 
-    public function render()
+    public function getData()
     {
-        include $this->rootDir . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'MainTemplate.phtml';
+        return [
+            'title' => $this->title,
+        ];
     }
 }
