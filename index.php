@@ -4,7 +4,8 @@ declare(strict_types = 1);
 
 error_reporting(E_ALL);
 
-$routes = include 'config' . DIRECTORY_SEPARATOR . 'routes.php';
+$config = include 'config' . DIRECTORY_SEPARATOR . 'routes.php'
+$routes = $config['routes'];
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
