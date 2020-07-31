@@ -4,24 +4,24 @@ declare(strict_types = 1);
 
 namespace controllers;
 
-class NewsController
+class PhpInfoController
 {
     /** @var string */
     public $title;
 
     /**
-     * NewsController constructor.
+     * MainController constructor.
      */
     public function __construct()
     {
-        $this->title = 'News list';
+        $this->title = 'phpinfo()';
     }
 
     public function getData()
     {
         return [
             'title' => $this->title,
-            'content' => 'News content',
+            'content' => phpinfo(),
         ];
     }
 }

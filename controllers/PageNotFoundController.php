@@ -15,13 +15,14 @@ class PageNotFoundController
     public function __construct()
     {
 	    http_response_code(404);
-        $this->title = 'Page not found';
+        $this->title = '404';
     }
 
     public function getData()
     {
         return [
             'title' => $this->title,
+            'content' => 'Page Not Found!',
         ];
     }
 }

@@ -21,6 +21,7 @@ class MainController
     {
         return [
             'title' => $this->title,
+            'content' => 'Main content',
         ];
     }
 }

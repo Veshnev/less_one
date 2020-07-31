@@ -21,6 +21,7 @@ class ArticlesController
     {
         return [
             'title' => $this->title,
+            'content' => 'Articles content',
         ];
     }
 }
