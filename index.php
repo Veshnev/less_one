@@ -5,7 +5,9 @@ error_reporting(E_ALL);
 
 // Configs part
 include __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'ConfigAggregatorComponent.php';
-$configs = new components\ConfigAggregatorComponent(__DIR__ . DIRECTORY_SEPARATOR . 'config');
+$configs = (new components\ConfigAggregatorComponent())
+    ->setConfigFolderPath(__DIR__ . DIRECTORY_SEPARATOR . 'config');
+
 $routes = $configs->getConfig('routes');
 
 // Request part

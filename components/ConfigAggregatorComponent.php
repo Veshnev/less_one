@@ -9,36 +9,30 @@ use DirectoryIterator;
 class ConfigAggregatorComponent
 {
     /** @var array Массив конфигов */
-    private $configs = [];
+    protected static $configs = [];
 
-    /**
-     * ConfigAggregatorComponent constructor.
-     * @param string $configFolderPath
-     */
-    public function __construct(string $configFolderPath)
-    {
-        $this->processAllConfigs($configFolderPath);
-    }
+    /** @var null|string */
+    protected static $configFolderPath = null;
 
     /**
      * Перебирает и читает все конфиги
      * @param string $path
      */
-    private function processAllConfigs(string $path): void
+    protected function processAllConfigs(string $path): void
     {
         $dir = new DirectoryIterator($path);
 
         foreach ($dir as $fileInfo) {
             $path = $fileInfo->getPath() . DIRECTORY_SEPARATOR . $fileInfo->getFilename();
 
-            if ($fileInfo->isDir() && !$fileInfo->isDot()) {
-                $this->processAllConfigs($path);
-            } else if ($fileInfo->isFile()) {
-                $newConfig = $this->readConfigFile($path);
+            if ($fileInfo->isDot()) {
+                continue;
+            }
 
-                if (is_array($newConfig)) {
-                    $this->addConfig($newConfig);
-                }
+            if ($fileInfo->isFile()) {
+                $this->addConfig($this->readConfigFile($path));
+            } else {
+                $this->processAllConfigs($path);
             }
         }
     }
@@ -46,10 +40,10 @@ class ConfigAggregatorComponent
     /**
      * Читает файл конфига
      *
-     * @param $filePath
-     * @return mixed
+     * @param string $filePath
+     * @return array
      */
-    private function readConfigFile($filePath)
+    protected function readConfigFile(string $filePath): array
     {
         return include $filePath;
     }
@@ -59,25 +53,28 @@ class ConfigAggregatorComponent
      *
      * @param array $newConfig
      */
-    private function addConfig(array $newConfig): void
+    protected function addConfig(array $newConfig): void
     {
-        // TODO Нужен перебор подключей для соединения с вложенными конфигами, иначе тупо перезапись
-//        foreach ($newConfig as & $item) {
-//            if (is_array($item)) {
-//                $item = $this->addConfig($item);
-//            }
-//        }
-
-        $this->configs = array_merge($newConfig, $this->configs);
+        static::$configs = array_replace_recursive(static::$configs, $newConfig);
     }
 
-    public function getConfig($name)
+    /**
+     * @param string $configFolderPath
+     * @return ConfigAggregatorComponent
+     */
+    public function setConfigFolderPath(string $configFolderPath): self
     {
-        if (!isset($this->configs[$name])) {
-            throw new \Exception('Required config not defined');
-        }
+        self::$configFolderPath = $configFolderPath;
+        return $this;
+    }
 
-        return $this->configs[$name];
+    /**
+     * @param string $name
+     * @return array
+     */
+    public function getConfig(string $name): array
+    {
+        return $this->getAllConfigs()[$name];
     }
 
     /**
@@ -87,6 +84,10 @@ class ConfigAggregatorComponent
      */
     public function getAllConfigs() :array
     {
-        return $this->configs;
+        if (empty(static::$configs)) {
+            $this->processAllConfigs(static::$configFolderPath);
+        }
+        
+        return static::$configs;
     }
 }
