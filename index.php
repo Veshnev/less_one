@@ -3,6 +3,10 @@
 declare(strict_types = 1);
 error_reporting(E_ALL);
 
+// Cache part
+include __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'CacheComponent.php';
+\components\CacheComponent::setRootDir(__DIR__ . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'myCache');
+
 // Configs part
 include __DIR__ . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'ConfigAggregatorComponent.php';
 $configs = (new components\ConfigAggregatorComponent())
@@ -18,7 +22,6 @@ if (!isset($routes[$requestPath])) {
     $requestPath = '/404';
 }
 
-// Controller part
 $pathController = __DIR__ . DIRECTORY_SEPARATOR . strtr($routes[$requestPath], '\\', DIRECTORY_SEPARATOR) . '.php';
 include $pathController;
 $controller = new $routes[$requestPath]();

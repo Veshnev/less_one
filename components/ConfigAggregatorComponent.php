@@ -85,7 +85,12 @@ class ConfigAggregatorComponent
     public function getAllConfigs() :array
     {
         if (empty(static::$configs)) {
+            static::$configs = CacheComponent::getCache(self::class);
+        }
+
+        if (empty(static::$configs)) {
             $this->processAllConfigs(static::$configFolderPath);
+            CacheComponent::setCache(self::class, static::$configs);
         }
         
         return static::$configs;
